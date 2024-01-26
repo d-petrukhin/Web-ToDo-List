@@ -3,14 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\User;
+use App\Services\AuthenticationService;
+use App\Services\AvatarService;
+use App\Services\DateFormatterService;
+use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Services\TaskService;
 
 class ProfileController extends Controller
 {
+    protected TaskService $taskService;
+    protected DateFormatterService $dateFormatter;
+    protected AvatarService $avatarService;
+    protected UserService $userService;
+    protected AuthenticationService $authenticationService;
+
+    public function __construct(TaskService $taskService, DateFormatterService $dateFormatter, AvatarService $avatarService, UserService $userService, AuthenticationService $authenticationService)
+    {
+        $this->taskService = $taskService;
+        $this->dateFormatter = $dateFormatter;
+        $this->avatarService = $avatarService;
+        $this->userService = $userService;
+        $this->authenticationService = $authenticationService;
+        $this->middleware('auth');
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -26,15 +46,28 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        $validatedData = $request->validated();
+        $avatarPath = $this->avatarService->handleAvatar($request);
+
+        if (!$avatarPath) {
+            $avatarPath = $this->avatarService->getDefaultAvatarPath();
         }
 
-        $request->user()->save();
+        $user->update(array_merge($validatedData, ['avatar' => $avatarPath]));
 
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('profile.show', ['profile' => $user->id]);
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        $totalTasks = $this->taskService->getTotalTasks($user);
+        $completedTasks = $this->taskService->getCompletedTasks($user);
+        $formattedCreatedAt = $this->dateFormatter->format($user->created_at);
+
+        return view('profile.show', compact('user', 'totalTasks', 'completedTasks', 'formattedCreatedAt'));
     }
 
     /**
@@ -44,17 +77,16 @@ class ProfileController extends Controller
     {
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
+            'name' => ['required', 'string'],
         ]);
 
         $user = $request->user();
+        $name = $request->input('name');
 
-        Auth::logout();
+        if ($this->userService->deleteUserAndTasks($user, $name)) {
+            return $this->authenticationService->logoutAndInvalidateSession();
+        }
 
-        $user->delete();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return Redirect::to('/');
+        return back()->withErrors(['name' => 'Invalid username for detection']);
     }
 }
