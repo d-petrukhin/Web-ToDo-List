@@ -45,24 +45,42 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Task $task)
+    public function show($id)
     {
+        $task = Task::findOrFail($id);
+
+        if (!$task->isOwnedByUser()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('tasks.show', compact('task'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Task $task)
+    public function edit($id)
     {
+        $task = Task::findOrFail($id);
+
+        if (!$task->isOwnedByUser()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         return view('tasks.edit', compact('task'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Task $task, UpdateTaskRequest $request)
+    public function update(UpdateTaskRequest $request, $id)
     {
+        $task = Task::findOrFail($id);
+
+        if (!$task->isOwnedByUser()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $task->update($request->validated());
 
         return redirect()->route('tasks.index');
@@ -71,8 +89,14 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Task $task)
+    public function destroy($id)
     {
+        $task = Task::findOrFail($id);
+
+        if (!$task->isOwnedByUser()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $task->delete();
 
         return redirect()->route('tasks.index');
