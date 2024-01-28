@@ -5,7 +5,6 @@
         <div class="card">
             <div class="card-body">
                 <h1 class="card-title text-center text-body-emphasis">Task Information</h1>
-
                 <table class="table table-bordered mt-4">
                     <thead class="thead-light">
                     <tr>
@@ -21,7 +20,7 @@
                     <tbody>
                     <tr>
                         <td>{{ $task->id }}</td>
-                        <td>{{ $task->completed ? 'True' : 'False' }}</td>
+                        <td>{{ $task->completed ? 'Completed' : 'Not completed' }}</td>
                         <td>{{ $task->title }}</td>
                         <td>{{ $task->description }}</td>
                         <td>{{ $task->created_at }}</td>
@@ -30,7 +29,6 @@
                     </tr>
                     </tbody>
                 </table>
-
                 <div class="row row-cols-auto">
                     <div class="col">
                         <a href="{{ route('tasks.edit', $task) }}" type="button" class="btn btn-outline-primary">Edit
