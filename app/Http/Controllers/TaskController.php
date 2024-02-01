@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    public function __construct()
+    protected TaskService $taskService;
+
+    public function __construct(TaskService $taskService)
     {
+        $this->taskService = $taskService;
         $this->middleware('auth');
     }
 
@@ -82,6 +86,10 @@ class TaskController extends Controller
         }
 
         $task->update($request->validated());
+
+        $data = $request->validated();
+
+        $this->taskService->updateTask($task, $data);
 
         return redirect()->route('tasks.index');
     }
