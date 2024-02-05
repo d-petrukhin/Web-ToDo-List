@@ -13,12 +13,12 @@
                                    id="firstCheckbox" disabled {{ $task->completed ? 'checked' : '' }} ">
                         </div>
                         <div class="col-10">
-                            <h6 class="link-offset-1 link-underline link-underline-opacity-0 list-group w-75">
+                            <a href="{{ route('tasks.show', $task) }}" class="link-offset-1 link-underline link-underline-opacity-0 list-group w-75">
                                 {{ $task->title }}
-                                <small class="d-block text-body-secondary">{{ $task->description }}</small></h6>
+                                <small class="d-block text-body-secondary">{{ $task->description }}</small></a>
                         </div>
                         <div class="col-auto">
-                            <a href="{{ route('tasks.show', $task) }}" type="button" class="btn btn-outline-primary">Edit</a>
+                            <a href="{{ route('tasks.edit', $task) }}" type="button" class="btn btn-outline-primary">Edit</a>
                         </div>
                         <div class="col-auto">
                             <form method="POST" action="{{ route('tasks.destroy', $task) }}" class="d-flex">

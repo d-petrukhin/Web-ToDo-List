@@ -1,18 +1,26 @@
-<div class="d-flex align-items-center justify-content-center" style="height: 60vh;">
-    <form method="POST" action="{{ $action }}" class="w-50 m-auto col-md-6 border rounded p-4">
+<div class="container d-flex align-items-center justify-content-center col-md- col-lg-8" style="height: 60vh;">
+    <form method="POST" action="{{ $action }}" class="needs-validation border rounded p-4 w-50" novalidate=""
+          enctype="multipart/form-data">
         @method($method)
         @csrf
         <h1 class="h3 mb-3 fw-normal">{{ $btn }}</h1>
-        <div class="form-floating mb-1">
-            <input type="text" name="title" class="form-control" id="floatingInput" placeholder="{{ $title }}">
-            <label for="floatingInput">{{ $title }}</label>
+        <div class="row g-3">
+            <div class="col-12">
+                <label for="username" class="form-label">Task name</label>
+                <div class="input-group has-validation">
+                    <input type="text" class="form-control" name="title" id="username" placeholder="Title" required=""
+                           value="{{ $title }}">
+                </div>
+            </div>
+            <div class="col-12">
+                <label for="floatingInput" class="form-label">Task description</label>
+                <textarea class="form-control" aria-label="With textarea" name="description" placeholder="Description">{{ $description }}</textarea>
+            </div>
+            @yield('additionalContent')
+            <hr class="my-4">
+            <button class="w-100 btn btn-outline-light btn-lg" type="submit">{{ $btn }}</button>
+            @include('layouts.error')
         </div>
-        <div class="form-floating mb-3">
-            <textarea name="description" class="form-control" placeholder="Description" id="floatingTextarea" style="height: 100px; max-height: 400px;
-      resize: vertical;">{{ $description }}</textarea>
-            <label for="floatingTextarea">{{ $description }}</label>
-        </div>
-        <button class="btn btn-outline-light w-100 py-2 mb-3" type="submit">{{ $btn }}</button>
-        @include('layouts.error')
     </form>
 </div>
+
