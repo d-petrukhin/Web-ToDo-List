@@ -1,7 +1,7 @@
 <div class="container fixed-bottom">
     <footer class="py-3 my-4">
         <ul class="nav justify-content-center border-top pt-2 mt-2">
-            <li class="nav-item"><a href="#" class="nav-link px-2 link-secondary text-white">Site map</a></li>
+            <li class="nav-item"><a href="{{ route('sitemap') }}" class="nav-link px-2 link-secondary text-white">Site map</a></li>
         </ul>
         <p class="text-center text-white pt-2">Made with
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
