@@ -5,8 +5,8 @@
             {{ Auth::user()->name }}
         </button>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="{{ route('profile.show', Auth::user()) }}">Profile</a></li>
-            <li><a class="dropdown-item" href="{{ route('settings', Auth::user()) }}">Settings</a></li>
+            <li><a class="dropdown-item" href="{{ route('profile.show', Auth::user()->id) }}">Profile</a></li>
+            <li><a class="dropdown-item" href="{{ route('settings', Auth::user()->id) }}">Settings</a></li>
             <li>
                 <hr class="dropdown-divider">
             </li>
@@ -19,6 +19,6 @@
         </ul>
     </div>
 @else
-    <a href="{{ route('login') }}" type="button" class="btn btn-dark me-2">Sign in</a>
-    <a href="{{ route('register') }}" type="button" class="btn btn-dark">Sign up</a>
+    <x-buttons.signin-button />
+    <x-buttons.signup-button />
 @endif
