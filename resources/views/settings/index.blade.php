@@ -17,7 +17,7 @@
                     <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">Delete profile
                     </button>
-                    <x-components.modal.modal-window />
+                    <x-modal.modal-window :user="$user" />
                 </div>
                 <hr class="my-4">
             </div>
