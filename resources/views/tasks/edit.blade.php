@@ -7,5 +7,5 @@
     'btn' => 'Edit task',
     'title' => $task->title,
     'description' => $task->description,
-    'additionalContent' => view('tasks.components.additionalFieldsForEditForm', compact('task'))])
+    'additionalContent' => view('components.inputs.fields-form-edit', compact('task'))])
 @endsection
