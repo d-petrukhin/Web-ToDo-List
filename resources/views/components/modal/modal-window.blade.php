@@ -11,11 +11,11 @@
                 <div class="modal-body">
                         <div class="mb-3">
                             <label for="name" class="col-form-label">Username</label>
-                            <label for="recipient-name"></label><input type="text" class="form-control" id="recipient-name" name="name">
+                            <label for="recipient-name"></label><input type="text" class="form-control" id="recipient-name" name="name" readonly onfocus="this.removeAttribute('readonly');">
                         </div>
                         <div class="mb-3">
                             <label for="password" class="col-form-label">Password</label>
-                            <label for="floatingPassword"></label><input type="password" class="form-control" id="floatingPassword" name="password">
+                            <label for="floatingPassword"></label><input type="password" class="form-control" id="floatingPassword" name="password" readonly onfocus="this.removeAttribute('readonly');">
                         </div>
                 </div>
                 <div class="modal-footer">
