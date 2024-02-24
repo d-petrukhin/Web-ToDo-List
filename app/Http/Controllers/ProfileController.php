@@ -83,7 +83,7 @@ class ProfileController extends Controller
         $user = $request->user();
         $name = $request->input('name');
 
-        if ($this->userService->deleteUserAndTasks($user, $name)) {
+        if ($this->userService->deleteUserAndFoldersAndTasks($user, $name)) {
             return $this->authenticationService->logoutAndInvalidateSession();
         }
 

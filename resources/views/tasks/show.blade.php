@@ -12,6 +12,7 @@
                         <th scope="col">Status Completed</th>
                         <th scope="col">Title</th>
                         <th scope="col">Description</th>
+                        <th scope="col">Folder</th>
                         <th scope="col">Created At</th>
                         <th scope="col">Updated At</th>
                         <th scope="col">Owner</th>
@@ -23,6 +24,7 @@
                         <td>{{ $task->completed ? 'Completed' : 'Not completed' }}</td>
                         <td>{{ $task->title }}</td>
                         <td>{{ $task->description }}</td>
+                        <td>{{ $task->folder ? $task->folder->title : 'NULL'}}</td>
                         <td>{{ $task->created_at }}</td>
                         <td>{{ $task->updated_at }}</td>
                         <td>{{ $task->user->name }}</td>

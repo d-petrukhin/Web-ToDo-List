@@ -20,4 +20,15 @@ class TaskService
     {
         return $user->tasks()->where('completed', true)->count();
     }
+
+    public function getTotalTasksInFolder($user, $folders)
+    {
+        $totalTasks = [];
+
+        foreach ($folders as $folder) {
+            $totalTasks[$folder->id] = $user->tasks()->where('folder_id', $folder->id)->count();
+        }
+
+        return $totalTasks;
+    }
 }

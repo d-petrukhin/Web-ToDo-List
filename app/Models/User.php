@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class, 'user_id', 'id');
     }
+
+    public function folders()
+    {
+        return $this->hasMany(Folder::class, 'user_id', 'id');
+    }
 }
