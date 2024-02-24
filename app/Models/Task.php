@@ -14,6 +14,7 @@ class Task extends Model
         'title',
         'description',
         'completed',
+        'folder_id'
     ];
 
     public function user()
@@ -21,6 +22,10 @@ class Task extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function folder()
+    {
+        return $this->belongsTo(Folder::class, 'folder_id', 'id');
+    }
     public function isOwnedByUser()
     {
         return $this->user_id === Auth::id();
