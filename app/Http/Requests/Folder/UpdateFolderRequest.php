@@ -22,7 +22,7 @@ class UpdateFolderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3|max:10',
+            'title' => 'required|string|min:3|max:20',
             'color' => 'string'
         ];
     }
