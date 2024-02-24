@@ -1,20 +1,19 @@
 @extends('layouts.app')
-@section('title', 'Tasks')
+@section('title', 'Folder')
 @section('content')
     <div class="p-5 text-center border rounded">
-        <h1 class="text-body-emphasis">Tasks</h1>
+        <h1 class="text-body-emphasis">Folder: {{ $folder->title }}</h1>
         <div class="list-group text-start col-lg-10 mx-auto">
-            <h6 class="pb-2 mb-0">Your tasks:</h6>
+            <h6 class="pb-2 mb-0">Your tasks in folder:</h6>
             @foreach($tasks as $task)
                 <div class="list-group row">
-                    <ul class="list-group-item d-flex gap-2">
+                    <ul class="list-group-item d-flex gap-2" >
                         <div class="col">
                             <input class="form-check-input me-1" type="checkbox" value="1" name="completed"
                                    id="firstCheckbox" disabled {{ $task->completed ? 'checked' : '' }} ">
                         </div>
                         <div class="col-10">
-                            <a href="{{ route('tasks.show', $task) }}"
-                               class="link-offset-1 link-underline link-underline-opacity-0 list-group w-75">
+                            <a href="{{ route('tasks.show', $task) }}" class="link-offset-1 link-underline link-underline-opacity-0 list-group w-75" style="color: {{ $folder->color }}">
                                 {{ $task->title }}
                                 <small class="d-block text-body-secondary">{{ $task->description }}</small></a>
                         </div>
@@ -25,14 +24,14 @@
                             <form method="POST" action="{{ route('tasks.destroy', $task) }}" class="d-flex">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-outline-danger"
-                                        onclick="return confirm('Are you sure?')">Delete
-                                </button>
+                                <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')">Delete</button>
                             </form>
                         </div>
                     </ul>
                 </div>
             @endforeach
-            @include('layouts.paginate', ['param' => $tasks])
+            @include('layouts.paginate', [
+    'param' => $tasks
+])
         </div>
 @endsection

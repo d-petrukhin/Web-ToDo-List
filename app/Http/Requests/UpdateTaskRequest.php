@@ -26,6 +26,7 @@ class UpdateTaskRequest extends FormRequest
             'title' => 'required|string|min:5|max:255',
             'description' => 'nullable|string',
             'completed' => 'nullable|boolean',
+            'folder_id' => 'nullable',
         ];
     }
 }
