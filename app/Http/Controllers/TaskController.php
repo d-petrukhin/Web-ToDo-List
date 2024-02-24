@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Models\Folder;
 use App\Models\Task;
 use App\Services\TaskService;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        $tasks = Task::orderBy('id')->where('user_id', Auth::id())->paginate(10);
+        $tasks = Task::orderBy('id')->where('user_id', Auth::id())->where('folder_id', null)->paginate(10);
 
         return view('tasks.index', compact('tasks'));
     }
@@ -33,7 +34,9 @@ class TaskController extends Controller
      */
     public function create()
     {
-        return view('tasks.create');
+        $folders = Folder::all()->where('user_id', Auth::id());
+
+        return view('tasks.create', compact('folders'));
     }
 
     /**
@@ -65,13 +68,15 @@ class TaskController extends Controller
      */
     public function edit($id)
     {
+        $folders = Folder::all()->where('user_id', Auth::id());
+
         $task = Task::findOrFail($id);
 
         if (!$task->isOwnedByUser()) {
             abort(403, 'Unauthorized action.');
         }
 
-        return view('tasks.edit', compact('task'));
+        return view('tasks.edit', compact('task', 'folders'));
     }
 
     /**
