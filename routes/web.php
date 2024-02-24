@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\FolderController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaskController;
@@ -22,9 +23,11 @@ Route::group(['prefix' => ''], static function () {
     Route::get('about', [AboutController::class, 'about'])->name('about');
 });
 
-Route::middleware('auth')->resource('tasks', TaskController::class);
-
-Route::middleware('auth')->resource('profile', ProfileController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('tasks', TaskController::class);
+    Route::resource('folders', FolderController::class);
+    Route::resource('profile', ProfileController::class);
+});
 
 Route::get('/sitemap', function () {
     return response()->file(public_path('sitemap.xml'));
