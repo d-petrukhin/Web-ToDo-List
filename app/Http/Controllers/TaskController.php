@@ -34,7 +34,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        $folders = Folder::all()->where('user_id', Auth::id());
+        $folders = Folder::where('user_id', Auth::id())->pluck('title', 'id');
 
         return view('tasks.create', compact('folders'));
     }
@@ -52,29 +52,17 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Task $task)
     {
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         return view('tasks.show', compact('task'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Task $task)
     {
-        $folders = Folder::all()->where('user_id', Auth::id());
-
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $folders = Folder::where('user_id', Auth::id())->pluck('title', 'id');
 
         return view('tasks.edit', compact('task', 'folders'));
     }
@@ -82,14 +70,8 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, $id)
+    public function update(UpdateTaskRequest $request, Task $task)
     {
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $task->update($request->validated());
 
         $data = $request->validated();
@@ -102,14 +84,8 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Task $task)
     {
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $task->delete();
 
         return redirect()->route('tasks.index');
