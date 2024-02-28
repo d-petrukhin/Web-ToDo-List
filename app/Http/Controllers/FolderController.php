@@ -58,15 +58,9 @@ class FolderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Folder $folder)
     {
-        $folder = Folder::findOrFail($id);
-
         $tasks = Task::orderBy('id')->where('folder_id', $folder->id)->paginate(10);
-
-        if (!$folder->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
 
         return view('folders.show', compact('folder', 'tasks'));
     }
@@ -74,28 +68,16 @@ class FolderController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Folder $folder)
     {
-        $folder = Folder::findOrFail($id);
-
-        if (!$folder->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         return view('folders.edit', compact('folder'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateFolderRequest $request, $id)
+    public function update(UpdateFolderRequest $request, Folder $folder)
     {
-        $folder = Folder::findOrFail($id);
-
-        if (!$folder->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $folder->update($request->validated());
 
         return redirect()->route('folders.index');
@@ -104,17 +86,11 @@ class FolderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, $id)
+    public function destroy(Request $request, Folder $folder)
     {
-        $folder = Folder::findOrFail($id);
-
-        if (!$folder->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $user = $request->user();
 
-        $this->folderService->deleteFolderAndTasks($user, $id);
+        $this->folderService->deleteFolderAndTasks($user, $folder);
 
         return redirect()->route('folders.index');
     }
