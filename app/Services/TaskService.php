@@ -18,7 +18,7 @@ class TaskService
 
     public function getCompletedTasks($user)
     {
-        return $user->tasks()->where('completed', true)->count();
+        return $user->tasks()->where('is_completed', true)->count();
     }
 
     public function getTotalTasksInFolder($user, $folders)
