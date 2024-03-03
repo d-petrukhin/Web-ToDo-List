@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Task;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateTaskRequest extends FormRequest
+class CreateTaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,6 @@ class UpdateTaskRequest extends FormRequest
         return [
             'title' => 'required|string|min:5|max:255',
             'description' => 'nullable|string',
-            'completed' => 'nullable|boolean',
             'folder_id' => 'nullable',
         ];
     }

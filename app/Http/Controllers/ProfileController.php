@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\Profile\ProfileUpdateRequest;
 use App\Models\User;
 use App\Services\AuthenticationService;
 use App\Services\AvatarService;
 use App\Services\DateFormatterService;
+use App\Services\TaskService;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use App\Services\TaskService;
 
 class ProfileController extends Controller
 {
@@ -60,7 +60,7 @@ class ProfileController extends Controller
         return redirect()->route('profile.show', ['profile' => $user->id]);
     }
 
-    public function show($id)
+    public function show($id): View
     {
         $user = User::findOrFail($id);
         $totalTasks = $this->taskService->getTotalTasks($user);
@@ -87,6 +87,6 @@ class ProfileController extends Controller
             return $this->authenticationService->logoutAndInvalidateSession();
         }
 
-        return back()->withErrors(['name' => 'Invalid username for detection']);
+        return back();
     }
 }

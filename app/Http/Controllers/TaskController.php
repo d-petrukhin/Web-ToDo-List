@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreateTaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Requests\Task\CreateTaskRequest;
+use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Models\Folder;
 use App\Models\Task;
 use App\Services\TaskService;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class TaskController extends Controller
 {
@@ -22,7 +24,7 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
         $tasks = Task::orderBy('id')->where('user_id', Auth::id())->where('folder_id', null)->paginate(10);
 
@@ -32,9 +34,9 @@ class TaskController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        $folders = Folder::all()->where('user_id', Auth::id());
+        $folders = Folder::where('user_id', Auth::id())->pluck('title', 'id');
 
         return view('tasks.create', compact('folders'));
     }
@@ -42,7 +44,7 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateTaskRequest $request)
+    public function store(CreateTaskRequest $request): RedirectResponse
     {
         Auth::user()->tasks()->create($request->validated());
 
@@ -52,29 +54,17 @@ class TaskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Task $task): View
     {
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         return view('tasks.show', compact('task'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Task $task): View
     {
-        $folders = Folder::all()->where('user_id', Auth::id());
-
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $folders = Folder::where('user_id', Auth::id())->pluck('title', 'id');
 
         return view('tasks.edit', compact('task', 'folders'));
     }
@@ -82,14 +72,8 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateTaskRequest $request, $id)
+    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $task->update($request->validated());
 
         $data = $request->validated();
@@ -102,14 +86,8 @@ class TaskController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Task $task): RedirectResponse
     {
-        $task = Task::findOrFail($id);
-
-        if (!$task->isOwnedByUser()) {
-            abort(403, 'Unauthorized action.');
-        }
-
         $task->delete();
 
         return redirect()->route('tasks.index');

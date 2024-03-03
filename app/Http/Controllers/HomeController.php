@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\View\View;
+
 class HomeController extends Controller
 {
-    public function home()
+    public function home(): View
     {
         return view('home.index');
     }

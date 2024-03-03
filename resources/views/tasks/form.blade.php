@@ -20,9 +20,8 @@
             <div class="col-12">
                 <label for="floatingInput" class="form-label">Select folder</label>
                 <select class="form-select" aria-label="Select folder" name="folder_id">
-                    <option selected value="{{ null }}">Select folder</option>
-                    @foreach($folders as $folder)
-                    <option value="{{ $folder->id }}">{{ $folder->title }}</option>
+                    @foreach($folders as $id => $title)
+                    <option value="{{ $id }}" @selected(isset($task) && $task->folder_id === $id)>{{ $title }}</option>
                     @endforeach
                 </select>
             </div>
